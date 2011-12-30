@@ -4,7 +4,7 @@ jQuery('document').ready(function($) {
 });
 
 (function( $ ){
-  $.fn.binnoCommentMentionsSubmit = function(options, callback) {
+  $.fn.binnoCommentMentionsSubmit = function(options, onSubmitCallback, onResponseCallback) {
                 var mentionsResponseData = false;
                 var settings = $.extend( {
                     'author': '#author',
@@ -62,8 +62,9 @@ jQuery('document').ready(function($) {
                     $.cookie('comment_author_email_' + binnoMentionsParams.cookieHash, data.email, {expires : 30000000, path: binnoMentionsParams.cookiePath});
                     $.cookie('comment_author_url_' + binnoMentionsParams.cookieHash, data.url, {expires : 30000000, path: binnoMentionsParams.cookiePath});
                 }
+		if (typeof(onSubmitCallback) == 'function') onSubmitCallback();
                 var result = $.post(binnoMentionsParams.ajaxurl, 'action='+data.action+'&security='+data.security+'&'+$(this).serialize()+mentions, function(response){
-                  if (typeof(callback) == 'function') callback(response);
+                  if (typeof(onResponseCallback) == 'function') onResponseCallback(response);
                   else window.location.reload();
                   });
                 return result;
